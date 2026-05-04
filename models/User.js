@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+        select: false,
     },
     role: {
         type: String,
@@ -27,10 +28,8 @@ const userSchema = new mongoose.Schema({
         default: "active",
     },
     otp: {
-        type: {
-            code: String,
-            expiresIn: Date,
-        }
+        code: { type: String },
+        expiresIn: { type: Date },
     }
 }, {timestamps: true});
 
