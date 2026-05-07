@@ -2,8 +2,12 @@ import * as recipeService from "./recipe.service.js";
 
 export const createRecipe = async (req, res) => {
     try {
-        const { title, description, image, category, author } = req.body;
-        if (!title || !description || !image || !category || !author) {
+        const { title, description, category, author } = req.body;
+        
+        // Handle file upload
+        const image = req.file ? req.file.path.replace(/\\/g, '/') : null;
+        
+        if (!title || !description || !category || !author) {
             return res.status(400).json({ error: "All fields are required" });
         }
         const recipe = await recipeService.createRecipeService({ title, description, image, category, author });
@@ -34,7 +38,12 @@ export const getRecipeById = async (req, res) => {
 
 export const updateRecipe = async (req, res) => {
     try {
-        const recipe = await recipeService.updateRecipeService(req.params.id, req.body);
+        const updateData = { ...req.body };
+        if (req.file) {
+            updateData.image = req.file.path.replace(/\\/g, '/');
+        }
+
+        const recipe = await recipeService.updateRecipeService(req.params.id, updateData);
         if (!recipe) return res.status(404).json({ error: "Recipe not found" });
         res.status(200).json(recipe);
     } catch (error) {

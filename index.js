@@ -9,6 +9,7 @@ import userRoutes from "./src/modules/user/user.routes.js";
 const app = express();
 
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api/categories", categoryRoutes);
 app.use("/api/recipes", recipeRoutes);
