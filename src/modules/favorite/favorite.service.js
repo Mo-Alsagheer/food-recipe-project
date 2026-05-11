@@ -1,11 +1,11 @@
-import Favorite from "../../../models/Favorite.js";
+import Favorite from "../../models/Favorite.js";
 
 export const createFavoriteService = async (data) => {
     return await Favorite.create(data);
 };
 
-export const getFavoritesService = async () => {
-    return await Favorite.find().populate("user", "name email").populate("recipe");
+export const getFavoritesService = async (userId) => {
+    return await Favorite.find({ user: userId }).populate("user", "name email").populate("recipe");
 };
 
 export const getFavoriteByIdService = async (id) => {

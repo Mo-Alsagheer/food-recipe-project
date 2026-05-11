@@ -38,7 +38,14 @@ export const getRecipeById = async (req, res) => {
 
 export const updateRecipe = async (req, res) => {
     try {
-        const updateData = { ...req.body };
+        const { title, description, category, author } = req.body;
+        const updateData = {};
+        
+        if (title) updateData.title = title;
+        if (description) updateData.description = description;
+        if (category) updateData.category = category;
+        if (author) updateData.author = author;
+
         if (req.file) {
             updateData.image = req.file.path.replace(/\\/g, '/');
         }

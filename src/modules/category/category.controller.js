@@ -34,7 +34,8 @@ export const getCategoryById = async (req, res) => {
 
 export const updateCategory = async (req, res) => {
     try {
-        const category = await categoryService.updateCategoryService(req.params.id, req.body);
+        const { name, description } = req.body;
+        const category = await categoryService.updateCategoryService(req.params.id, { name, description });
         if (!category) return res.status(404).json({ error: "Category not found" });
         res.status(200).json(category);
     } catch (error) {

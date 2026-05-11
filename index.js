@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express from "express";
-import { dbConnection } from "./config/dbConnection.js";
+import { dbConnection } from "./src/config/dbConnection.js";
 import categoryRoutes from "./src/modules/category/category.routes.js";
 import recipeRoutes from "./src/modules/recipe/recipe.routes.js";
 import favoriteRoutes from "./src/modules/favorite/favorite.routes.js";

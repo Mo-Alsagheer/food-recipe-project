@@ -1,4 +1,5 @@
 import Recipe from "../../models/Recipe.js";
+import Favorite from "../../models/Favorite.js";
 
 export const createRecipeService = async (data) => {
     return await Recipe.create(data);
@@ -17,5 +18,6 @@ export const updateRecipeService = async (id, data) => {
 };
 
 export const deleteRecipeService = async (id) => {
+    await Favorite.deleteMany({ recipe: id });
     return await Recipe.findByIdAndDelete(id);
 };

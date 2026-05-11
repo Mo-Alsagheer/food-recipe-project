@@ -1,4 +1,6 @@
-import Category from "../../../models/Category.js";
+import Category from "../../models/Category.js";
+import Recipe from "../../models/Recipe.js";
+import Favorite from "../../models/Favorite.js";
 
 export const createCategoryService = async (data) => {
     return await Category.create(data);
@@ -17,5 +19,11 @@ export const updateCategoryService = async (id, data) => {
 };
 
 export const deleteCategoryService = async (id) => {
+    const recipes = await Recipe.find({ category: id });
+    const recipeIds = recipes.map(r => r._id);
+    if (recipeIds.length > 0) {
+        await Favorite.deleteMany({ recipe: { $in: recipeIds } });
+        await Recipe.deleteMany({ category: id });
+    }
     return await Category.findByIdAndDelete(id);
 };
