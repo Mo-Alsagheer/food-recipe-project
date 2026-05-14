@@ -1,12 +1,14 @@
 import express from "express";
 import { createCategory, getCategories, getCategoryById, updateCategory, deleteCategory } from "./category.controller.js";
+import { validate } from "../../middleware/validate.js";
+import { createCategorySchema, updateCategorySchema, getCategorySchema, deleteCategorySchema } from "./category.validation.js";
 
 const router = express.Router();
 
-router.post("/", createCategory);
+router.post("/", validate(createCategorySchema), createCategory);
 router.get("/", getCategories);
-router.get("/:id", getCategoryById);
-router.put("/:id", updateCategory);
-router.delete("/:id", deleteCategory);
+router.get("/:id", validate(getCategorySchema), getCategoryById);
+router.put("/:id", validate(updateCategorySchema), updateCategory);
+router.delete("/:id", validate(deleteCategorySchema), deleteCategory);
 
 export default router;
