@@ -1,42 +1,61 @@
 import joi from "joi";
-import { objectIdValidation } from "../../utils/customValidation.js";
+import { objectIdValidation, passwordValidation } from "../../utils/customValidation.js";
 
 export const createUserSchema = joi.object({
-    name: joi.string().min(2).max(50).required().messages({
-        "string.empty": "Name is required",
-        "string.min": "Name must be at least 2 characters long",
-    }),
-    email: joi.string().email().required().messages({
-        "string.empty": "Email is required",
-        "string.email": "Please provide a valid email address",
-    }),
-    password: joi.string().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/).required().messages({
-        "string.empty": "Password is required",
-        "string.pattern.base": "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
-    }),
-    role: joi.string().valid("admin", "user").optional(),
-    status: joi.string().valid("active", "inactive").optional()
-});
+    body: joi.object({
+        name: joi.string().trim().min(2).max(50).required().messages({
+            "string.empty": "Name is required",
+            "string.min": "Name must be at least 2 characters long",
+        }),
+        email: joi.string().trim().email().lowercase().required().messages({
+            "string.empty": "Email is required",
+            "string.email": "Please provide a valid email address",
+        }),
+        password: passwordValidation.required(),
+        role: joi.string().valid("admin", "user").optional(),
+        status: joi.string().valid("active", "inactive").optional()
+    }).unknown(false),
+    params: joi.object().unknown(false),
+    query: joi.object().unknown(false)
+}).unknown(false);
 
 export const updateUserSchema = joi.object({
-    id: objectIdValidation.required(),
-    name: joi.string().min(2).max(50).optional().messages({
-        "string.min": "Name must be at least 2 characters long",
-    }),
-    email: joi.string().email().optional().messages({
-        "string.email": "Please provide a valid email address",
-    }),
-    password: joi.string().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/).optional().messages({
-        "string.pattern.base": "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
-    }),
-    role: joi.string().valid("admin", "user").optional(),
-    status: joi.string().valid("active", "inactive").optional()
-});
+    params: joi.object({
+        id: objectIdValidation.required(),
+    }).unknown(false),
+    body: joi.object({
+        name: joi.string().trim().min(2).max(50).optional().messages({
+            "string.min": "Name must be at least 2 characters long",
+        }),
+        email: joi.string().trim().email().lowercase().optional().messages({
+            "string.email": "Please provide a valid email address",
+        }),
+        password: passwordValidation.optional(),
+        // Note: Sensitive fields; ensure authorization middleware is used before allowing updates
+        role: joi.string().valid("admin", "user").optional(),
+        status: joi.string().valid("active", "inactive").optional()
+    }).min(1).unknown(false),
+    query: joi.object().unknown(false)
+}).unknown(false);
 
 export const getUserSchema = joi.object({
-    id: objectIdValidation.required(),
-});
+    params: joi.object({
+        id: objectIdValidation.required(),
+    }).unknown(false),
+    body: joi.object().unknown(false),
+    query: joi.object().unknown(false)
+}).unknown(false);
 
 export const deleteUserSchema = joi.object({
-    id: objectIdValidation.required(),
-});
+    params: joi.object({
+        id: objectIdValidation.required(),
+    }).unknown(false),
+    body: joi.object().unknown(false),
+    query: joi.object().unknown(false)
+}).unknown(false);
+
+export const getUsersSchema = joi.object({
+    params: joi.object().unknown(false),
+    body: joi.object().unknown(false),
+    query: joi.object().unknown(false) // Add query validations here later if pagination/filtering is implemented
+}).unknown(false);

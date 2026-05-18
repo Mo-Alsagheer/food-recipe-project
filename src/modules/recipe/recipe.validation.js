@@ -3,7 +3,9 @@ import { objectIdValidation } from "../../utils/customValidation.js";
 
 const fileValidation = joi.object({
     fieldname: joi.string().required(),
-    originalname: joi.string().required(),
+    originalname: joi.string().pattern(/\.(jpg|jpeg|png|webp|gif)$/i).required().messages({
+        "string.pattern.base": "File extension must be jpg, jpeg, png, webp, or gif"
+    }),
     encoding: joi.string().required(),
     mimetype: joi.string().valid("image/jpeg", "image/png", "image/webp", "image/gif").required().messages({
         "any.only": "Only jpeg, png, webp, and gif image formats are allowed"
@@ -18,40 +20,63 @@ const fileValidation = joi.object({
 }).unknown(true); // Allow other fields multer might add
 
 export const createRecipeSchema = joi.object({
-    title: joi.string().min(3).max(100).required().messages({
-        "string.empty": "Title is required",
-        "string.min": "Title must be at least 3 characters long",
-    }),
-    description: joi.string().min(10).required().messages({
-        "string.empty": "Description is required",
-        "string.min": "Description must be at least 10 characters long",
-    }),
-    category: objectIdValidation.required().messages({
-        "any.required": "Category ID is required"
-    }),
-    author: objectIdValidation.required().messages({
-        "any.required": "Author ID is required"
-    }),
-    file: fileValidation.optional() // Image is optional in the Mongoose schema, but you can make it required here if needed
-});
+    body: joi.object({
+        title: joi.string().trim().min(3).max(100).required().messages({
+            "string.empty": "Title is required",
+            "string.min": "Title must be at least 3 characters long",
+        }),
+        description: joi.string().trim().min(10).required().messages({
+            "string.empty": "Description is required",
+            "string.min": "Description must be at least 10 characters long",
+        }),
+        category: objectIdValidation.required().messages({
+            "any.required": "Category ID is required"
+        }),
+        author: objectIdValidation.required().messages({
+            "any.required": "Author ID is required"
+        })
+    }).unknown(false),
+    file: fileValidation.optional(),
+    params: joi.object().unknown(false),
+    query: joi.object().unknown(false)
+}).unknown(false);
 
 export const updateRecipeSchema = joi.object({
-    id: objectIdValidation.required(),
-    title: joi.string().min(3).max(100).optional().messages({
-        "string.min": "Title must be at least 3 characters long",
-    }),
-    description: joi.string().min(10).optional().messages({
-        "string.min": "Description must be at least 10 characters long",
-    }),
-    category: objectIdValidation.optional(),
-    author: objectIdValidation.optional(),
-    file: fileValidation.optional()
-});
+    params: joi.object({
+        id: objectIdValidation.required(),
+    }).unknown(false),
+    body: joi.object({
+        title: joi.string().trim().min(3).max(100).optional().messages({
+            "string.min": "Title must be at least 3 characters long",
+        }),
+        description: joi.string().trim().min(10).optional().messages({
+            "string.min": "Description must be at least 10 characters long",
+        }),
+        category: objectIdValidation.optional(),
+        author: objectIdValidation.optional()
+    }).min(1).unknown(false),
+    file: fileValidation.optional(),
+    query: joi.object().unknown(false)
+}).unknown(false);
 
 export const getRecipeSchema = joi.object({
-    id: objectIdValidation.required(),
-});
+    params: joi.object({
+        id: objectIdValidation.required(),
+    }).unknown(false),
+    body: joi.object().unknown(false),
+    query: joi.object().unknown(false)
+}).unknown(false);
 
 export const deleteRecipeSchema = joi.object({
-    id: objectIdValidation.required(),
-});
+    params: joi.object({
+        id: objectIdValidation.required(),
+    }).unknown(false),
+    body: joi.object().unknown(false),
+    query: joi.object().unknown(false)
+}).unknown(false);
+
+export const getRecipesSchema = joi.object({
+    params: joi.object().unknown(false),
+    body: joi.object().unknown(false),
+    query: joi.object().unknown(false)
+}).unknown(false);
