@@ -3,7 +3,6 @@ import express from "express";
 import { dbConnection } from "./src/config/dbConnection.js";
 import categoryRoutes from "./src/modules/category/category.routes.js";
 import recipeRoutes from "./src/modules/recipe/recipe.routes.js";
-import favoriteRoutes from "./src/modules/favorite/favorite.routes.js";
 import userRoutes from "./src/modules/user/user.routes.js";
 import authRoutes from "./src/modules/auth/auth.routes.js";
 import { globalErrorHandler } from "./src/middleware/globalErrorHandler.js";
@@ -36,11 +35,10 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/recipes", recipeRoutes);
-app.use("/api/favorites", favoriteRoutes);
 app.use("/api/users", userRoutes);
 
 // Handle unhandled routes
-app.all('*', (req, res, next) => {
+app.all('*any', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 

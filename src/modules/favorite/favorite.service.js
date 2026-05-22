@@ -15,3 +15,11 @@ export const getFavoriteByIdService = async (id) => {
 export const deleteFavoriteService = async (id) => {
     return await Favorite.findByIdAndDelete(id);
 };
+
+export const getFavoriteByUserAndRecipeService = async (userId, recipeId) => {
+    return await Favorite.findOne({ user: userId, recipe: recipeId });
+};
+
+export const deleteFavoriteByUserAndRecipeService = async (userId, recipeId) => {
+    return await Favorite.findOneAndDelete({ user: userId, recipe: recipeId });
+};

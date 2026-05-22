@@ -4,11 +4,11 @@ import * as authService from "./auth.service.js";
 
 export const signup = catchError(async (req, res, next) => {
     const { name, email, password } = req.body;
-    
+
     if (!name || !email || !password) {
         return next(new AppError("Name, email, and password are required", 400));
     }
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         return next(new AppError("Please provide a valid email address", 400));

@@ -1,16 +1,7 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import User from "../../models/User.js";
 import { AppError } from "../../utils/AppError.js";
-
-const signToken = (id) => {
-    if (!process.env.JWT_SECRET) {
-        throw new Error("JWT_SECRET is not defined in environment variables");
-    }
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN || "1d"
-    });
-};
+import { signToken } from "../../utils/jwt.js";
 
 export const signupUser = async (name, email, password) => {
     // Check if user already exists
