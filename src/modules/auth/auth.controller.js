@@ -19,7 +19,7 @@ export const signup = catchError(async (req, res, next) => {
     }
 
     const { token, user } = await authService.signupUser(name, email, password);
-    
+
     res.status(201).json({
         status: 'success',
         token,
@@ -41,4 +41,27 @@ export const signin = catchError(async (req, res, next) => {
         token,
         data: { user }
     });
+});
+
+export const forgotPassword = catchError(async (req, res, next) => {
+    const { email } = req.body;
+    if (!email) return next(new AppError("Email is required", 400));
+
+    await authService.forgotPasswordService(email);
+
+    res.status(200).json({
+        status: "success",
+        message: "If that email is registered, an OTP has been sent.",
+    });
+});
+
+export const resetPassword = catchError(async (req, res, next) => {
+    const { email, otp, password } = req.body;
+    if (!email || !otp || !password) {
+        return next(new AppError("Email, OTP, and new password are required", 400));
+    }
+
+    await authService.resetPasswordService(email, otp, password);
+
+    res.status(200).json({ status: "success", message: "Password has been reset successfully." });
 });
