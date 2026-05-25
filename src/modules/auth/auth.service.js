@@ -4,7 +4,6 @@ import { AppError } from "../../utils/AppError.js";
 import { signToken } from "../../utils/jwt.js";
 
 export const signupUser = async (name, email, password) => {
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         throw new AppError("Email already exists", 409);
@@ -12,14 +11,9 @@ export const signupUser = async (name, email, password) => {
 
     const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS) || 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    
-    const newUser = await User.create({
-        name,
-        email,
-        password: hashedPassword
-    });
 
-    const token = signToken(newUser._id);
+    const newUser = await User.create({ name, email, password: hashedPassword });
+    const token = signToken(newUser._id, newUser.role);
 
     return {
         token,
@@ -34,7 +28,11 @@ export const signinUser = async (email, password) => {
         throw new AppError("Incorrect email or password", 401);
     }
 
-    const token = signToken(user._id);
+    if (user.status === "deactive") {
+        throw new AppError("Your account has been deactivated. Please contact support.", 403);
+    }
+
+    const token = signToken(user._id, user.role);
 
     return {
         token,

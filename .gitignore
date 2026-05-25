@@ -25,3 +25,6 @@ build/
 .DS_Store
 Thumbs.db
 Food_Recipe.postman_collection.json
+.agents
+skills-lock.json
+.claude/

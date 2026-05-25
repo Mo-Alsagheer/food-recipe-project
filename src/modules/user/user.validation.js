@@ -13,7 +13,7 @@ export const createUserSchema = joi.object({
         }),
         password: passwordValidation.required(),
         role: joi.string().valid("admin", "user").optional(),
-        status: joi.string().valid("active", "inactive").optional()
+        status: joi.string().valid("active", "deactive").optional()
     }).unknown(false),
     params: joi.object().unknown(false),
     query: joi.object().unknown(false)
@@ -31,9 +31,8 @@ export const updateUserSchema = joi.object({
             "string.email": "Please provide a valid email address",
         }),
         password: passwordValidation.optional(),
-        // Note: Sensitive fields; ensure authorization middleware is used before allowing updates
         role: joi.string().valid("admin", "user").optional(),
-        status: joi.string().valid("active", "inactive").optional()
+        status: joi.string().valid("active", "deactive").optional()
     }).min(1).unknown(false),
     query: joi.object().unknown(false)
 }).unknown(false);
@@ -57,5 +56,5 @@ export const deleteUserSchema = joi.object({
 export const getUsersSchema = joi.object({
     params: joi.object().unknown(false),
     body: joi.object().unknown(false),
-    query: joi.object().unknown(false) // Add query validations here later if pagination/filtering is implemented
+    query: joi.object().unknown(false),
 }).unknown(false);
