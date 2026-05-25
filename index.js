@@ -5,6 +5,7 @@ import categoryRoutes from "./src/modules/category/category.routes.js";
 import recipeRoutes from "./src/modules/recipe/recipe.routes.js";
 import userRoutes from "./src/modules/user/user.routes.js";
 import authRoutes from "./src/modules/auth/auth.routes.js";
+import adminRoutes from "./src/modules/admin/admin.routes.js";
 import { globalErrorHandler } from "./src/middleware/globalErrorHandler.js";
 import { AppError } from "./src/utils/AppError.js";
 
@@ -33,6 +34,7 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/recipes", recipeRoutes);
 app.use("/api/users", userRoutes);
