@@ -8,6 +8,7 @@ import { RegisterPage } from "@/pages/RegisterPage";
 import { ForgotPasswordPage } from "@/pages/ForgotPasswordPage";
 import { HomePage } from "@/pages/HomePage";
 import { RecipeListPage } from "@/pages/RecipeListPage";
+import { RecipeDetailPage } from "@/pages/RecipeDetailPage";
 
 // Pages — filled in subsequent phases
 const PlaceholderPage = ({ title }: { title: string }) => (
@@ -26,7 +27,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/recipes" element={<RecipeListPage />} />
-              <Route path="/recipes/:id" element={<PlaceholderPage title="Recipe Detail" />} />
+              <Route path="/recipes/:id" element={<RecipeDetailPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
