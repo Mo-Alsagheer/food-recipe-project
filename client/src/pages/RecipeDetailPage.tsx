@@ -37,8 +37,8 @@ export function RecipeDetailPage() {
   useEffect(() => {
     if (!id) return;
     api
-      .get<{ data: Recipe }>(`/recipes/${id}`)
-      .then((r) => setRecipe(r.data.data))
+      .get<{ data: { recipe: Recipe } }>(`/recipes/${id}`)
+      .then((r) => setRecipe(r.data.data.recipe))
       .catch(() => navigate("/recipes"))
       .finally(() => setLoading(false));
   }, [id, navigate]);
@@ -46,8 +46,8 @@ export function RecipeDetailPage() {
   useEffect(() => {
     if (!user || !id) return;
     api
-      .get<{ data: { recipeId: string }[] }>("/favorites")
-      .then((r) => setIsFav(r.data.data.some((f) => f.recipeId === id)))
+      .get<{ favorites: { recipe: { _id: string } }[] }>("/users/me/favourites")
+      .then((r) => setIsFav(r.data.favorites.some((f) => f.recipe._id === id)))
       .catch(() => {});
   }, [user, id]);
 
@@ -59,11 +59,11 @@ export function RecipeDetailPage() {
     setFavLoading(true);
     try {
       if (isFav) {
-        await api.delete(`/favorites/${id}`);
+        await api.delete(`/recipes/${id}/favourite`);
         setIsFav(false);
         toast({ title: "Removed from favorites" });
       } else {
-        await api.post("/favorites", { recipeId: id });
+        await api.post(`/recipes/${id}/favourite`);
         setIsFav(true);
         toast({ title: "Added to favorites" });
       }

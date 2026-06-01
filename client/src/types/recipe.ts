@@ -15,7 +15,9 @@ export interface Recipe {
 }
 
 export interface PaginatedResponse<T> {
-  data: T[];
+  recipes?: T[];
+  favorites?: T[];
+  data?: T[];
   total: number;
   page: number;
   limit: number;

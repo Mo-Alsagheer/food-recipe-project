@@ -20,7 +20,7 @@ export function RegisterPage() {
     setLoading(true);
     try {
       const { data } = await api.post("/auth/signup", form);
-      login(data.user, data.token);
+      login(data.data.user, data.token);
       navigate("/");
     } catch (err: unknown) {
       const msg =

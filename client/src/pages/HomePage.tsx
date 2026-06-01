@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import api from "@/lib/axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Search, ChefHat } from "lucide-react";
 
 interface Category {
   _id: string;
-  count: number;
+  name: string;
 }
 
 const CATEGORY_EMOJI: Record<string, string> = {
@@ -27,11 +26,9 @@ export function HomePage() {
 
   useEffect(() => {
     api
-      .get<{ data: Category[] }>("/recipes/categories")
-      .then((r) => setCategories(r.data.data ?? []))
-      .catch(() => {
-        // categories are decorative; ignore errors
-      });
+      .get<Category[]>("/categories")
+      .then((r) => setCategories(r.data ?? []))
+      .catch(() => {});
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -83,9 +80,8 @@ export function HomePage() {
                 onClick={() => handleCategory(cat._id)}
                 className="flex flex-col items-center gap-1 rounded-xl border bg-card hover:border-primary hover:shadow-md transition-all p-4 min-w-[100px]"
               >
-                <span className="text-3xl">{CATEGORY_EMOJI[cat._id] ?? "🍴"}</span>
-                <span className="capitalize font-medium text-sm">{cat._id}</span>
-                <Badge variant="secondary" className="text-xs">{cat.count}</Badge>
+                <span className="text-3xl">{CATEGORY_EMOJI[cat.name.toLowerCase()] ?? "🍴"}</span>
+                <span className="capitalize font-medium text-sm">{cat.name}</span>
               </button>
             ))}
           </div>

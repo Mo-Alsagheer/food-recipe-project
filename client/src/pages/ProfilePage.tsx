@@ -10,11 +10,11 @@ import type { Recipe } from "@/types/recipe";
 
 interface FavoriteEntry {
   _id: string;
-  recipeId: Recipe;
+  recipe: Recipe;
 }
 
 interface FavoritesResponse {
-  data: FavoriteEntry[];
+  favorites: FavoriteEntry[];
   total: number;
   page: number;
   pages: number;
@@ -31,10 +31,10 @@ export function ProfilePage() {
     async (page: number) => {
       setLoading(true);
       try {
-        const { data } = await api.get<FavoritesResponse>("/favorites", {
+        const { data } = await api.get<FavoritesResponse>("/users/me/favourites", {
           params: { page, limit: 8 },
         });
-        setFavorites(data.data);
+        setFavorites(data.favorites);
         setMeta({ page: data.page, pages: data.pages, total: data.total });
       } catch {
         toast({ variant: "destructive", title: "Error", description: "Failed to load favorites" });
@@ -51,7 +51,7 @@ export function ProfilePage() {
 
   const removeFavorite = async (recipeId: string) => {
     try {
-      await api.delete(`/favorites/${recipeId}`);
+      await api.delete(`/recipes/${recipeId}/favourite`);
       toast({ title: "Removed from favorites" });
       fetchFavorites(meta.page);
     } catch {
@@ -97,12 +97,12 @@ export function ProfilePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {favorites.map((fav) => (
             <div key={fav._id} className="relative group">
-              <RecipeCard recipe={fav.recipeId} />
+              <RecipeCard recipe={fav.recipe} />
               <Button
                 variant="destructive"
                 size="icon"
                 className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7"
-                onClick={() => removeFavorite(fav.recipeId._id)}
+                onClick={() => removeFavorite(fav.recipe._id)}
               >
                 <Heart className="h-3.5 w-3.5 fill-current" />
               </Button>

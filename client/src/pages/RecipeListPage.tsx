@@ -35,7 +35,7 @@ export function RecipeListPage() {
       if (search) params.search = search;
       if (category) params.category = category;
       const { data } = await api.get<PaginatedResponse<Recipe>>("/recipes", { params });
-      setRecipes(data.data);
+      setRecipes(data.recipes);
       setMeta({ page: data.page, pages: data.pages, total: data.total });
     } catch {
       setRecipes([]);

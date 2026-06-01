@@ -20,7 +20,7 @@ export function LoginPage() {
     setLoading(true);
     try {
       const { data } = await api.post("/auth/signin", form);
-      login(data.user, data.token);
+      login(data.data.user, data.token);
       navigate("/");
     } catch (err: unknown) {
       const msg =

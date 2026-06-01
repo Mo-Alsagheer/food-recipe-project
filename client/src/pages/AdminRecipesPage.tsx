@@ -81,7 +81,7 @@ export function AdminRecipesPage() {
       const { data } = await api.get<PaginatedResponse<Recipe>>("/admin/recipes", {
         params: { page, limit: 10 },
       });
-      setRecipes(data.data);
+      setRecipes(data.recipes ?? []);
       setPages(data.pages);
     } catch {
       toast({ variant: "destructive", title: "Error", description: "Failed to load recipes" });
