@@ -46,7 +46,7 @@ export const adminGetRecipes = catchError(async (req, res, next) => {
 });
 
 export const adminCreateRecipe = catchError(async (req, res, next) => {
-    const { title, description, category, ingredients, steps, tags } = req.body;
+    const { title, description, category, ingredients, steps, tags, cookingTime, difficulty, rating } = req.body;
 
     if (!title || !description || !category || !ingredients || !steps) {
         if (req.file) fs.unlink(req.file.path, () => {});
@@ -57,13 +57,14 @@ export const adminCreateRecipe = catchError(async (req, res, next) => {
 
     const recipe = await recipeService.createRecipeService({
         title, description, category, ingredients, steps, tags, image,
+        cookingTime, difficulty, rating,
         createdBy: req.user._id,
     });
     res.status(201).json({ status: "success", data: { recipe } });
 });
 
 export const adminUpdateRecipe = catchError(async (req, res, next) => {
-    const { title, description, category, ingredients, steps, tags } = req.body;
+    const { title, description, category, ingredients, steps, tags, cookingTime, difficulty, rating } = req.body;
     const updateData = {};
 
     if (title !== undefined) updateData.title = title;
@@ -72,6 +73,9 @@ export const adminUpdateRecipe = catchError(async (req, res, next) => {
     if (ingredients !== undefined) updateData.ingredients = ingredients;
     if (steps !== undefined) updateData.steps = steps;
     if (tags !== undefined) updateData.tags = tags;
+    if (cookingTime !== undefined) updateData.cookingTime = cookingTime;
+    if (difficulty !== undefined) updateData.difficulty = difficulty;
+    if (rating !== undefined) updateData.rating = rating;
 
     let oldImage = null;
     if (req.file) {

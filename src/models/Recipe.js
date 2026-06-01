@@ -25,6 +25,22 @@ const recipeSchema = new mongoose.Schema({
         type: [String],
         default: [],
     },
+    cookingTime: {
+        type: Number,
+        min: 1,
+        default: null,
+    },
+    difficulty: {
+        type: String,
+        enum: ["easy", "medium", "hard"],
+        default: null,
+    },
+    rating: {
+        type: Number,
+        min: 0,
+        max: 5,
+        default: 0,
+    },
     image: {
         type: String,
         required: false,
