@@ -4,8 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, ChefHat } from "lucide-react";
 import type { Recipe, Category } from "@/types/recipe";
 
-const categoryName = (c: Recipe["category"]) =>
-  typeof c === "object" ? (c as Category).name : c;
+const categoryName = (c: Recipe["category"]): string => {
+  if (typeof c === "string") return c;
+  if (c && "name" in c) return c.name;
+  return "";
+};
 
 const DIFFICULTY_COLOR = {
   easy: "bg-green-100 text-green-800",
