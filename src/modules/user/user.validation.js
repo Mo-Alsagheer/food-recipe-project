@@ -56,5 +56,8 @@ export const deleteUserSchema = joi.object({
 export const getUsersSchema = joi.object({
     params: joi.object().unknown(false),
     body: joi.object().unknown(false),
-    query: joi.object().unknown(false),
+    query: joi.object({
+        page: joi.number().integer().min(1).optional(),
+        limit: joi.number().integer().min(1).max(50).optional(),
+    }).unknown(false),
 }).unknown(false);

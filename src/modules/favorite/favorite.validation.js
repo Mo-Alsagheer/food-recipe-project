@@ -14,5 +14,8 @@ export const favoriteRecipeSchema = joi.object({
 export const getMyFavoritesSchema = joi.object({
     params: joi.object().unknown(false),
     body: joi.object().unknown(false),
-    query: joi.object().unknown(false)
+    query: joi.object({
+        page: joi.number().integer().min(1).optional(),
+        limit: joi.number().integer().min(1).max(50).optional(),
+    }).unknown(false),
 }).unknown(false);

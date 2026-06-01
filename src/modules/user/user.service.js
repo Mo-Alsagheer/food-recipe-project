@@ -8,8 +8,16 @@ export const createUserService = async (data) => {
     return await User.create(data);
 };
 
-export const getUsersService = async () => {
-    return await User.find().select("-password");
+export const getUsersService = async ({ page = 1, limit = 10 } = {}) => {
+    const clampedLimit = Math.min(Number(limit), 50);
+    const skip = (Number(page) - 1) * clampedLimit;
+
+    const [users, total] = await Promise.all([
+        User.find().select("-password").skip(skip).limit(clampedLimit).lean(),
+        User.countDocuments(),
+    ]);
+
+    return { users, total, page: Number(page), limit: clampedLimit, pages: Math.ceil(total / clampedLimit) };
 };
 
 export const getUserByIdService = async (id) => {
@@ -25,4 +33,12 @@ export const updateUserService = async (id, data) => {
 
 export const deleteUserService = async (id) => {
     return await User.findByIdAndDelete(id);
+};
+
+export const toggleUserStatusService = async (id) => {
+    const user = await User.findById(id).select("-password");
+    if (!user) return null;
+    user.status = user.status === "active" ? "deactive" : "active";
+    await user.save();
+    return user;
 };

@@ -28,12 +28,9 @@ export const createFavorite = catchError(async (req, res, next) => {
 
 export const getFavorites = catchError(async (req, res, next) => {
     const userId = req.user._id;
-    const favorites = await favoriteService.getFavoritesService(userId);
-    res.status(200).json({
-        status: "success",
-        results: favorites.length,
-        data: { favorites }
-    });
+    const { page, limit } = req.query;
+    const result = await favoriteService.getFavoritesService(userId, { page, limit });
+    res.status(200).json({ status: "success", ...result });
 });
 
 export const deleteFavorite = catchError(async (req, res, next) => {

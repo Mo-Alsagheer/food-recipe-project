@@ -15,8 +15,9 @@ export const createUser = catchError(async (req, res, next) => {
 });
 
 export const getUsers = catchError(async (req, res, next) => {
-    const users = await userService.getUsersService();
-    res.status(200).json(users);
+    const { page, limit } = req.query;
+    const result = await userService.getUsersService({ page, limit });
+    res.status(200).json({ status: "success", ...result });
 });
 
 export const getUserById = catchError(async (req, res, next) => {
