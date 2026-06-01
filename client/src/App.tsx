@@ -1,8 +1,43 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/context/AuthContext";
+import { Navbar } from "@/components/Navbar";
+import { ProtectedRoute, AdminRoute } from "@/components/ProtectedRoute";
+import { Toaster } from "@/components/ui/toaster";
+
+// Pages — filled in subsequent phases
+const PlaceholderPage = ({ title }: { title: string }) => (
+  <div className="container mx-auto px-4 py-16 text-center">
+    <h1 className="text-2xl font-bold">{title}</h1>
+  </div>
+);
+
 function App() {
   return (
-    <div className="min-h-screen bg-background">
-      <h1 className="text-primary text-2xl font-bold p-8">Food Recipe</h1>
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<PlaceholderPage title="Home" />} />
+              <Route path="/recipes" element={<PlaceholderPage title="Recipes" />} />
+              <Route path="/recipes/:id" element={<PlaceholderPage title="Recipe Detail" />} />
+              <Route path="/login" element={<PlaceholderPage title="Login" />} />
+              <Route path="/register" element={<PlaceholderPage title="Register" />} />
+
+              <Route element={<ProtectedRoute />}>
+                <Route path="/profile" element={<PlaceholderPage title="Profile" />} />
+              </Route>
+
+              <Route element={<AdminRoute />}>
+                <Route path="/admin/recipes" element={<PlaceholderPage title="Admin — Recipes" />} />
+              </Route>
+            </Routes>
+          </main>
+        </div>
+        <Toaster />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
