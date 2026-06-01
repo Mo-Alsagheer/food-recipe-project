@@ -23,7 +23,10 @@ import { useToast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
 import type { Recipe, PaginatedResponse } from "@/types/recipe";
 
-const CATEGORIES = ["breakfast", "lunch", "dinner", "dessert", "snack", "beverage"];
+interface Category {
+  _id: string;
+  name: string;
+}
 
 interface RecipeFormData {
   title: string;
@@ -66,6 +69,7 @@ function recipeToForm(r: Recipe): RecipeFormData {
 export function AdminRecipesPage() {
   const { toast } = useToast();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -74,6 +78,10 @@ export function AdminRecipesPage() {
   const [form, setForm] = useState<RecipeFormData>(emptyForm());
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    api.get<Category[]>("/categories").then((r) => setCategories(r.data)).catch(() => {});
+  }, []);
 
   const fetchRecipes = useCallback(async () => {
     setLoading(true);
@@ -195,10 +203,12 @@ export function AdminRecipesPage() {
                 <div className="space-y-2">
                   <Label>Category *</Label>
                   <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
-                    <SelectTrigger><SelectValue placeholder="Select…" /></SelectTrigger>
+                    <SelectTrigger>
+                      <SelectValue placeholder={categories.length ? "Select…" : "No categories yet"} />
+                    </SelectTrigger>
                     <SelectContent>
-                      {CATEGORIES.map((c) => (
-                        <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>
+                      {categories.map((c) => (
+                        <SelectItem key={c._id} value={c._id} className="capitalize">{c.name}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -287,7 +297,9 @@ export function AdminRecipesPage() {
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3 min-w-0">
                     <CardTitle className="text-base truncate">{r.title}</CardTitle>
-                    <Badge variant="secondary" className="capitalize shrink-0">{r.category}</Badge>
+                    <Badge variant="secondary" className="capitalize shrink-0">
+                      {typeof r.category === "object" ? (r.category as unknown as Category).name : r.category}
+                    </Badge>
                     {r.difficulty && (
                       <Badge variant="outline" className="capitalize shrink-0">{r.difficulty}</Badge>
                     )}
