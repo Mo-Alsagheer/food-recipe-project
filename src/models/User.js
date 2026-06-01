@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: false,
         select: false,
     },
     role: {
@@ -24,13 +24,22 @@ const userSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["active", "inactive"],
+        enum: ["active", "deactive"],
         default: "active",
     },
     otp: {
         code: { type: String },
         expiresIn: { type: Date },
-    }
+    },
+    provider: {
+        type: String,
+        enum: ["local", "google", "facebook"],
+        default: "local",
+    },
+    providerId: {
+        type: String,
+        default: null,
+    },
 }, {timestamps: true});
 
 const User = mongoose.model("User", userSchema);
