@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
 import { ForgotPasswordPage } from "@/pages/ForgotPasswordPage";
+import { HomePage } from "@/pages/HomePage";
 
 // Pages — filled in subsequent phases
 const PlaceholderPage = ({ title }: { title: string }) => (
@@ -22,7 +23,7 @@ function App() {
           <Navbar />
           <main className="flex-1">
             <Routes>
-              <Route path="/" element={<PlaceholderPage title="Home" />} />
+              <Route path="/" element={<HomePage />} />
               <Route path="/recipes" element={<PlaceholderPage title="Recipes" />} />
               <Route path="/recipes/:id" element={<PlaceholderPage title="Recipe Detail" />} />
               <Route path="/login" element={<LoginPage />} />
