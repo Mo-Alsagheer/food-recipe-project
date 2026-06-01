@@ -9,6 +9,7 @@ import { ForgotPasswordPage } from "@/pages/ForgotPasswordPage";
 import { HomePage } from "@/pages/HomePage";
 import { RecipeListPage } from "@/pages/RecipeListPage";
 import { RecipeDetailPage } from "@/pages/RecipeDetailPage";
+import { AdminRecipesPage } from "@/pages/AdminRecipesPage";
 
 // Pages — filled in subsequent phases
 const PlaceholderPage = ({ title }: { title: string }) => (
@@ -37,7 +38,7 @@ function App() {
               </Route>
 
               <Route element={<AdminRoute />}>
-                <Route path="/admin/recipes" element={<PlaceholderPage title="Admin — Recipes" />} />
+                <Route path="/admin/recipes" element={<AdminRecipesPage />} />
               </Route>
             </Routes>
           </main>
