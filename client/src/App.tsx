@@ -3,6 +3,9 @@ import { AuthProvider } from "@/context/AuthContext";
 import { Navbar } from "@/components/Navbar";
 import { ProtectedRoute, AdminRoute } from "@/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/toaster";
+import { LoginPage } from "@/pages/LoginPage";
+import { RegisterPage } from "@/pages/RegisterPage";
+import { ForgotPasswordPage } from "@/pages/ForgotPasswordPage";
 
 // Pages — filled in subsequent phases
 const PlaceholderPage = ({ title }: { title: string }) => (
@@ -22,8 +25,9 @@ function App() {
               <Route path="/" element={<PlaceholderPage title="Home" />} />
               <Route path="/recipes" element={<PlaceholderPage title="Recipes" />} />
               <Route path="/recipes/:id" element={<PlaceholderPage title="Recipe Detail" />} />
-              <Route path="/login" element={<PlaceholderPage title="Login" />} />
-              <Route path="/register" element={<PlaceholderPage title="Register" />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
               <Route element={<ProtectedRoute />}>
                 <Route path="/profile" element={<PlaceholderPage title="Profile" />} />
