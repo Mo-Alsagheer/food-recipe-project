@@ -39,7 +39,7 @@ export const getRecipeById = catchError(async (req, res, next) => {
 });
 
 export const updateRecipe = catchError(async (req, res, next) => {
-    const { title, description, category, ingredients, steps, tags } = req.body;
+    const { title, description, category, ingredients, steps, tags, cookingTime, difficulty, rating } = req.body;
     const updateData = {};
 
     if (title !== undefined) updateData.title = title;
@@ -48,6 +48,9 @@ export const updateRecipe = catchError(async (req, res, next) => {
     if (ingredients !== undefined) updateData.ingredients = ingredients;
     if (steps !== undefined) updateData.steps = steps;
     if (tags !== undefined) updateData.tags = tags;
+    if (cookingTime !== undefined) updateData.cookingTime = cookingTime;
+    if (difficulty !== undefined) updateData.difficulty = difficulty;
+    if (rating !== undefined) updateData.rating = rating;
 
     let oldImage = null;
     if (req.file) {
