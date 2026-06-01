@@ -1,6 +1,7 @@
 import { catchError } from "../../utils/catchError.js";
 import { AppError } from "../../utils/AppError.js";
 import * as authService from "./auth.service.js";
+import { signToken } from "../../utils/jwt.js";
 
 export const signup = catchError(async (req, res, next) => {
     const { name, email, password } = req.body;
@@ -65,3 +66,15 @@ export const resetPassword = catchError(async (req, res, next) => {
 
     res.status(200).json({ status: "success", message: "Password has been reset successfully." });
 });
+
+export const googleCallback = (req, res, next) => {
+    const user = req.user;
+    if (!user) return next(new AppError("Google authentication failed", 401));
+
+    const token = signToken(user._id, user.role);
+    res.status(200).json({
+        status: "success",
+        token,
+        data: { user: { _id: user._id, name: user.name, email: user.email, role: user.role } },
+    });
+};

@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import passport from "./src/config/passport.js";
 import { dbConnection } from "./src/config/dbConnection.js";
 import categoryRoutes from "./src/modules/category/category.routes.js";
 import recipeRoutes from "./src/modules/recipe/recipe.routes.js";
@@ -31,6 +32,7 @@ process.on('unhandledRejection', (err) => {
 const app = express();
 
 app.use(express.json());
+app.use(passport.initialize());
 app.use("/uploads", express.static("uploads"));
 
 app.use("/api/auth", authRoutes);
