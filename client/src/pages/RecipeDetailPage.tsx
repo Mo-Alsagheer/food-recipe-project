@@ -15,7 +15,10 @@ import {
   ListOrdered,
   ShoppingBasket,
 } from "lucide-react";
-import type { Recipe } from "@/types/recipe";
+import type { Recipe, Category } from "@/types/recipe";
+
+const categoryName = (c: Recipe["category"]) =>
+  typeof c === "object" ? (c as Category).name : c;
 
 const DIFFICULTY_COLOR = {
   easy: "bg-green-100 text-green-800",
@@ -98,7 +101,7 @@ export function RecipeDetailPage() {
       <div className="aspect-video bg-muted rounded-xl overflow-hidden mb-6">
         {recipe.image ? (
           <img
-            src={`/uploads/${recipe.image}`}
+            src={`/${recipe.image}`}
             alt={recipe.title}
             className="w-full h-full object-cover"
           />
@@ -125,7 +128,7 @@ export function RecipeDetailPage() {
 
       {/* Meta badges */}
       <div className="flex flex-wrap gap-2 mb-4">
-        <Badge variant="secondary" className="capitalize">{recipe.category}</Badge>
+        <Badge variant="secondary" className="capitalize">{categoryName(recipe.category)}</Badge>
         {recipe.difficulty && (
           <span className={`text-xs px-2 py-1 rounded-full font-medium ${DIFFICULTY_COLOR[recipe.difficulty]}`}>
             {recipe.difficulty}

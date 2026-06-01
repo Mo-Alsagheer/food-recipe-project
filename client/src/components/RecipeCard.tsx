@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, ChefHat } from "lucide-react";
-import type { Recipe } from "@/types/recipe";
+import type { Recipe, Category } from "@/types/recipe";
+
+const categoryName = (c: Recipe["category"]) =>
+  typeof c === "object" ? (c as Category).name : c;
 
 const DIFFICULTY_COLOR = {
   easy: "bg-green-100 text-green-800",
@@ -21,7 +24,7 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
         <div className="aspect-video bg-muted overflow-hidden">
           {recipe.image ? (
             <img
-              src={`/uploads/${recipe.image}`}
+              src={`/${recipe.image}`}
               alt={recipe.title}
               className="w-full h-full object-cover"
             />
@@ -43,7 +46,7 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
           <p className="text-sm text-muted-foreground line-clamp-2">{recipe.description}</p>
         </CardContent>
         <CardFooter className="px-4 pb-4 pt-0 flex items-center justify-between">
-          <Badge variant="secondary" className="capitalize">{recipe.category}</Badge>
+          <Badge variant="secondary" className="capitalize">{categoryName(recipe.category)}</Badge>
           {recipe.cookingTime && (
             <span className="text-xs text-muted-foreground flex items-center gap-1">
               <Clock className="h-3 w-3" />

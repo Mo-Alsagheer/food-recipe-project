@@ -21,7 +21,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
-import type { Recipe, PaginatedResponse } from "@/types/recipe";
+import type { Recipe, Category, PaginatedResponse } from "@/types/recipe";
 
 interface Category {
   _id: string;
@@ -56,7 +56,7 @@ function recipeToForm(r: Recipe): RecipeFormData {
   return {
     title: r.title,
     description: r.description,
-    category: r.category,
+    category: typeof r.category === "object" ? (r.category as Category)._id : r.category,
     cookingTime: String(r.cookingTime ?? ""),
     difficulty: r.difficulty ?? "",
     rating: String(r.rating ?? ""),

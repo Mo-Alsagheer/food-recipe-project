@@ -1,8 +1,13 @@
+export interface Category {
+  _id: string;
+  name: string;
+}
+
 export interface Recipe {
   _id: string;
   title: string;
   description: string;
-  category: string;
+  category: Category | string;
   image?: string;
   cookingTime?: number;
   difficulty?: "easy" | "medium" | "hard";
